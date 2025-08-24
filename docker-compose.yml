@@ -1,0 +1,139 @@
+version: '3.8'
+
+services:
+  # UPI Central Switch Service
+  upi-central:
+    build: ./upi-central
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://upi-central-db:3306/upi_central
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=Manik@231896
+      - BANK_A_URL=http://bank-a:8081
+      - BANK_B_URL=http://bank-b:8082
+    depends_on:
+      - upi-central-db
+      - bank-a
+      - bank-b
+    networks:
+      - upi-network
+
+  # Bank A Service
+  bank-a:
+    build: ./bank-a
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://bank-a-db:3306/bank_a
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=Manik@231896
+      - SERVER_PORT=8081
+    depends_on:
+      - bank-a-db
+    networks:
+      - upi-network
+
+  # Bank B Service
+  bank-b:
+    build: ./bank-b
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://bank-b-db:3306/bank_b
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=Manik@231896
+      - SERVER_PORT=8082
+    depends_on:
+      - bank-b-db
+    networks:
+      - upi-network
+
+  # Databases
+  upi-central-db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=Manik@231896
+      - MYSQL_DATABASE=upi_central
+    volumes:
+      - upi_central_data:/var/lib/mysql
+      - ./sql/upi-central-init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - upi-network
+
+  bank-a-db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=Manik@231896
+      - MYSQL_DATABASE=bank_a
+    volumes:
+      - bank_a_data:/var/lib/mysql
+      - ./sql/bank-a-init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - upi-network
+
+  bank-b-db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=Manik@231896
+      - MYSQL_DATABASE=bank_b
+    volumes:
+      - bank_b_data:/var/lib/mysql
+      - ./sql/bank-b-init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - upi-network
+
+  # Monitoring - Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - upi-network
+
+  # Monitoring - Grafana
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - upi-network
+
+  # Alerting - AlertManager
+  alertmanager:
+    image: prom/alertmanager:latest
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./monitoring/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    networks:
+      - upi-network
+
+volumes:
+  upi_central_data:
+  bank_a_data:
+  bank_b_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  upi-network:
+    driver: bridge

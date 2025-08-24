@@ -1,0 +1,285 @@
+{
+  "info": {
+    "name": "UPI Payment System APIs",
+    "description": "Complete API collection for testing UPI payment system",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "user",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "user123",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "User Management",
+      "item": [
+        {
+          "name": "Register New User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"upiId\": \"testuser@paytm\",\n  \"phoneNumber\": \"9876543213\",\n  \"name\": \"Test User\",\n  \"bankCode\": \"BANK_A\",\n  \"accountNumber\": \"ACC004\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/upi/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "upi", "register"]
+            }
+          }
+        },
+        {
+          "name": "Validate User by UPI ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/api/upi/validate?identifier=john@paytm",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "upi", "validate"],
+              "query": [
+                {
+                  "key": "identifier",
+                  "value": "john@paytm"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Validate User by Phone Number",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/api/upi/validate?identifier=9876543210",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "upi", "validate"],
+              "query": [
+                {
+                  "key": "identifier",
+                  "value": "9876543210"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "Transfer Money",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"senderUpiId\": \"john@paytm\",\n  \"receiverUpiId\": \"jane@phonepe\",\n  \"amount\": 1000.00,\n  \"description\": \"Payment for dinner\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/upi/transfer",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "upi", "transfer"]
+            }
+          }
+        },
+        {
+          "name": "Get Transaction Status",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/api/upi/transaction/{{transactionId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "upi", "transaction", "{{transactionId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Transaction History",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/api/upi/transactions/john@paytm",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "upi", "transactions", "john@paytm"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin Operations",
+      "auth": {
+        "type": "basic",
+        "basic": [
+          {
+            "key": "username",
+            "value": "admin",
+            "type": "string"
+          },
+          {
+            "key": "password",
+            "value": "admin123",
+            "type": "string"
+          }
+        ]
+      },
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/api/admin/users",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "admin", "users"]
+            }
+          }
+        },
+        {
+          "name": "Get All Transactions",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/api/admin/transactions",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "admin", "transactions"]
+            }
+          }
+        },
+        {
+          "name": "Disable User",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "http://localhost:8080/api/admin/user/john@paytm/disable",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "admin", "user", "john@paytm", "disable"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bank Services",
+      "item": [
+        {
+          "name": "Bank A - Get Balance",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/api/bank/balance/ACC001",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "bank", "balance", "ACC001"]
+            }
+          }
+        },
+        {
+          "name": "Bank B - Get Balance",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8082/api/bank/balance/ACC002",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8082",
+              "path": ["api", "bank", "balance", "ACC002"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Monitoring",
+      "item": [
+        {
+          "name": "Health Check - UPI Central",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/actuator/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["actuator", "health"]
+            }
+          }
+        },
+        {
+          "name": "Metrics - UPI Central",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/actuator/metrics",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["actuator", "metrics"]
+            }
+          }
+        },
+        {
+          "name": "Prometheus Metrics",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/actuator/prometheus",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["actuator", "prometheus"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "transactionId",
+      "value": "TXN12345678",
+      "type": "string"
+    }
+  ]
+}

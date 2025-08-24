@@ -1,0 +1,29 @@
+groups:
+  - name: upi-system-alerts
+    rules:
+      - alert: HighFailureRate
+        expr: rate(upi_transfer_requests_total{status="failed"}[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High failure rate in UPI transactions"
+          description: "UPI transaction failure rate is {{ $value }} per second"
+
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service is down"
+          description: "{{ $labels.instance }} has been down for more than 1 minute"
+
+      - alert: HighResponseTime
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High response time"
+          description: "95th percentile response time is {{ $value }} seconds"

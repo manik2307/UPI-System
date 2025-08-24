@@ -1,0 +1,28 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "UpiCentralApplication",
+            "request": "launch",
+            "mainClass": "com.upi.central.UpiCentralApplication",
+            "projectName": "upi-central"
+        },
+        {
+            "type": "java",
+            "name": "BankBApplication",
+            "request": "launch",
+            "mainClass": "com.bank.b.BankBApplication",
+            "projectName": "bank-b"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-BankAApplication<bank-a>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.bank.a.BankAApplication",
+            "projectName": "bank-a",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

@@ -1,0 +1,31 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "upi_rules.yml"
+
+scrape_configs:
+  - job_name: 'upi-central'
+    static_configs:
+      - targets: ['upi-central:8080']
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+
+  - job_name: 'bank-a'
+    static_configs:
+      - targets: ['bank-a:8081']
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+
+  - job_name: 'bank-b'
+    static_configs:
+      - targets: ['bank-b:8082']
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
