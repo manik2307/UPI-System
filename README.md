@@ -51,7 +51,7 @@ A comprehensive UPI (Unified Payments Interface) system implementation with micr
 
 ## Project Structure
 
-```
+
 upi-payment-system/
 ├── docker-compose.yml           # Complete Docker setup
 ├── sql/                        # Database initialization scripts
@@ -60,9 +60,9 @@ upi-payment-system/
 ├── bank-a/                    # Bank A service
 ├── bank-b/                    # Bank B service
 └── postman-collection/        # API testing collection
-```
 
-## Quick Start
+
+### Quick Start
 
 ### Prerequisites
 - Docker and Docker Compose

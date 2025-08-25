@@ -3,13 +3,12 @@ spring:
     activate:
       on-profile: docker
   datasource:
-    url: jdbc:mysql://localhost:3306/upi_central
-    username: root
-    password: Manik@231896
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
 
 bank:
   a:
-    url: http://localhost:8081
+    url: ${BANK_A_URL}
   b:
-    url: http://localhost:8082
-
+    url: ${BANK_B_URL}
