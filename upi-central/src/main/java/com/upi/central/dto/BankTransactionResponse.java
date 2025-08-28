@@ -6,6 +6,9 @@ public class BankTransactionResponse {
     private boolean success;
     private String message;
     private BigDecimal balance;
+      public BankTransactionResponse() {
+        // Required for Jackson
+    }
     
     public BankTransactionResponse(boolean success, String message, BigDecimal balance) {
         this.success = success;

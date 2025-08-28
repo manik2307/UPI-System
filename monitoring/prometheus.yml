@@ -3,7 +3,7 @@ global:
   evaluation_interval: 15s
 
 rule_files:
-  - "upi_rules.yml"
+  - "/etc/prometheus/upi_rules.yml"
 
 scrape_configs:
   - job_name: 'upi-central'

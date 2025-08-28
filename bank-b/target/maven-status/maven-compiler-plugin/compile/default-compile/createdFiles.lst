@@ -1,4 +1,3 @@
-com\bank\b\config\SecurityConfig.class
 com\bank\b\controller\BankController.class
 com\bank\b\repository\AccountRepository.class
 com\bank\b\BankBApplication.class

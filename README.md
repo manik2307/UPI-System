@@ -184,7 +184,6 @@ curl -u user:user123 \
 - `upi.register.requests`: User registration attempts
 - `upi.validate.requests`: User validation requests  
 - `upi.transfer.requests`: Money transfer requests
-- `http_request_duration_seconds`: API response times
 
 ### Alerts Configured
 - **High Failure Rate**: >10% transaction failures
